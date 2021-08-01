@@ -51,42 +51,39 @@ class MainWidget(QWidget):
         grid_layout.addWidget(self.ui)
         self.setLayout(grid_layout)
 
-    def drawGraph(self):
-        values = self.buttonClick()
-        self.ui.MatPlotWidget.canvas.axes.plot(values)
-        print("drawing")
-        self.ui.MatPlotWidget.canvas.draw()
-
     def buttonClick(self):
+        self.ui.label_4.setText("")
         max = self.maxInput()
         min = self.minInput()
         step=0.1
         x = np.arange(min, max+step, step)
         y = self.functionInput(x)
         self.functionInput(x)
-
         self.ui.MatPlotWidget.canvas.axes.cla()
         self.ui.MatPlotWidget.canvas.axes.plot(x, y)
-        print("drawing")
         self.ui.MatPlotWidget.canvas.draw()
 
     def minInput(self):
-        min = int(self.ui.MinButton.text())
-        return min
+        try:
+            min = int(self.ui.MinButton.text())
+            return min
+        except:
+            self.ui.label_4.setText("please enter numbers only")
+
 
     def maxInput(self):
-        max = int(self.ui.MaxButton.text())
-        return max
+        try:
+            max = int(self.ui.MaxButton.text())
+            return max
+        except:
+            self.ui.label_4.setText("please enter numbers only")
 
     def functionInput(self, x):
         function = self.ui.FunctionButton.text()
-        y = x
         function = function.replace("^", "**")
         function+="+0"
-        print(function)
         temp = ""
         for char in function:
-            print(char)
             if char == '*' or char == '+' or char == '-' or char == '/' :
                 if("x" in temp):
                     replaceStr=temp
@@ -96,10 +93,11 @@ class MainWidget(QWidget):
                 temp=""
             else:
                 temp += char
-        print(function)
-        y = eval(function)
-        print(y)
-        return y
+        try:
+            y = eval(function)
+            return y
+        except:
+            self.ui.label_4.setText("Invalid input eg: x^2 or 3x^3+2x^2")
 
 app = QApplication([])
 window = MainWidget()
