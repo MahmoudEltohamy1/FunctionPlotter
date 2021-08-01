@@ -43,9 +43,8 @@ class MainWidget(QWidget):
 
         designer_file.close()
 
-        # self.ui.pushButton_generate_random_signal.clicked.connect(self.update_graph)
         self.ui.pushButton.clicked.connect(self.buttonClick)
-        self.setWindowTitle("PySide2 & Matplotlib Example GUI")
+        self.setWindowTitle("Function Plotter")
 
         grid_layout = QGridLayout()
         grid_layout.addWidget(self.ui)
@@ -57,8 +56,8 @@ class MainWidget(QWidget):
         min = self.minInput()
         step=0.1
         x = np.arange(min, max+step, step)
-        y = self.functionInput(x)
-        self.functionInput(x)
+        function=self.ui.FunctionButton.text()
+        y = self.functionInput(x,function)
         self.ui.MatPlotWidget.canvas.axes.cla()
         self.ui.MatPlotWidget.canvas.axes.plot(x, y)
         self.ui.MatPlotWidget.canvas.draw()
@@ -78,8 +77,7 @@ class MainWidget(QWidget):
         except:
             self.ui.label_4.setText("please enter numbers only")
 
-    def functionInput(self, x):
-        function = self.ui.FunctionButton.text()
+    def functionInput(self, x,function):
         function = function.replace("^", "**")
         function+="+0"
         temp = ""
